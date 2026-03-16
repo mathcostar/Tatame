@@ -53,8 +53,8 @@ begin
 
     if pAluno.ID = 0 then
       begin
-        lQuery.SQL.Add('INSERT INTO tatame.alunos (nome, faixa_id, instrutor_id, cep, estado, cidade, bairro)');
-        lQuery.SQL.Add('VALUES (:nome, :faixa_id, :instrutor_id, :cep, :estado, :cidade, :bairro)');
+        lQuery.SQL.Add('INSERT INTO tatame.alunos (nome, faixa_id, instrutor_id, cep, logradouro, estado, cidade, bairro)');
+        lQuery.SQL.Add('VALUES (:nome, :faixa_id, :instrutor_id, :cep, :logradouro, :estado, :cidade, :bairro)');
       end
     else
       begin
@@ -63,6 +63,7 @@ begin
         lQuery.SQL.Add('       faixa_id     = :faixa_id,');
         lQuery.SQL.Add('       instrutor_id = :instrutor_id,');
         lQuery.SQL.Add('       cep          = :cep,');
+        lQuery.SQL.Add('       logradouro   = :logradouro,');
         lQuery.SQL.Add('       estado       = :estado,');
         lQuery.SQL.Add('       cidade       = :cidade,');
         lQuery.SQL.Add('       bairro       = :bairro');
@@ -75,6 +76,7 @@ begin
     lQuery.Params.ParamByName('faixa_id').AsInteger     := pAluno.FaixaID;
     lQuery.Params.ParamByName('instrutor_id').AsInteger := pAluno.InstrutorID;
     lQuery.Params.ParamByName('cep').AsString           := pAluno.Endereco.CEP;
+    lQuery.Params.ParamByName('logradouro').AsString    := pAluno.Endereco.Logradouro;
     lQuery.Params.ParamByName('estado').AsString        := pAluno.Endereco.Estado;
     lQuery.Params.ParamByName('cidade').AsString        := pAluno.Endereco.Cidade;
     lQuery.Params.ParamByName('bairro').AsString        := pAluno.Endereco.Bairro;
@@ -114,16 +116,17 @@ begin
     begin
       lAluno := TAlunoModel.Create();
 
-      lAluno.ID              := pQuery.FieldByName('id').AsInteger;
-      lAluno.Nome            := pQuery.FieldByName('nome').AsString;
-      lAluno.FaixaID         := pQuery.FieldByName('faixa_id').AsInteger;
-      lAluno.NomeFaixa       := pQuery.FieldByName('nome_faixa').AsString;
-      lAluno.InstrutorID     := pQuery.FieldByName('instrutor_id').AsInteger;
-      lAluno.NomeInstrutor   := pQuery.FieldByName('nome_instrutor').AsString;
-      lAluno.Endereco.CEP    := pQuery.FieldByName('cep').AsString;
-      lAluno.Endereco.Estado := pQuery.FieldByName('estado').AsString;
-      lAluno.Endereco.Cidade := pQuery.FieldByName('cidade').AsString;
-      lAluno.Endereco.Bairro := pQuery.FieldByName('bairro').AsString;
+      lAluno.ID                  := pQuery.FieldByName('id').AsInteger;
+      lAluno.Nome                := pQuery.FieldByName('nome').AsString;
+      lAluno.FaixaID             := pQuery.FieldByName('faixa_id').AsInteger;
+      lAluno.NomeFaixa           := pQuery.FieldByName('nome_faixa').AsString;
+      lAluno.InstrutorID         := pQuery.FieldByName('instrutor_id').AsInteger;
+      lAluno.NomeInstrutor       := pQuery.FieldByName('nome_instrutor').AsString;
+      lAluno.Endereco.CEP        := pQuery.FieldByName('cep').AsString;
+      lAluno.Endereco.Logradouro := pQuery.FieldByName('logradouro').AsString;
+      lAluno.Endereco.Estado     := pQuery.FieldByName('estado').AsString;
+      lAluno.Endereco.Cidade     := pQuery.FieldByName('cidade').AsString;
+      lAluno.Endereco.Bairro     := pQuery.FieldByName('bairro').AsString;
 
       Result.Add(lAluno);
 

@@ -178,7 +178,7 @@ begin
   if lLinha < 1 then
     begin
       FAlunoSelecionado := nil;
-      Exit;
+      Exit();
     end;
 
   lIndice := lLinha - 1;

@@ -91,7 +91,7 @@ begin
   fdConexao.Params.Add('Server=localhost');
   fdConexao.Params.Add('Database=postgres');
   fdConexao.Params.Add('User_Name=postgres');
-  fdConexao.Params.Add('Password=#abc123#');
+  fdConexao.Params.Add('Password=123');
   fdConexao.Params.Add('Port=5432');
   fdConexao.LoginPrompt := False;
   fdConexao.Connected := True;
@@ -210,6 +210,7 @@ begin
     lQuery.SQL.Add('  faixa_id     SMALLINT,');
     lQuery.SQL.Add('  instrutor_id INTEGER,');
     lQuery.SQL.Add('  cep          VARCHAR(9),');
+    lQuery.SQL.Add('  logradouro   VARCHAR(100),');
     lQuery.SQL.Add('  estado       VARCHAR(50),');
     lQuery.SQL.Add('  cidade       VARCHAR(50),');
     lQuery.SQL.Add('  bairro       VARCHAR(100),');
