@@ -16,7 +16,8 @@ uses
   Vcl.ExtCtrls,
   Vcl.Grids,
   System.Generics.Collections,
-  Tatame.Model.Instrutor;
+  Tatame.Model.Instrutor,
+  System.UITypes;
 
 type
   TfrmCadastroInstrutor = class(TForm)
@@ -39,8 +40,6 @@ type
     procedure CarregarInstrutores;
     procedure PreencherGrid;
     procedure AbrirCadastro(const pInstrutor: TInstrutorModel);
-
-    function ObterInstrutorSelecionado: TInstrutorModel;
   public
     destructor Destroy; override;
   end;
@@ -147,11 +146,6 @@ begin
     FInstrutorSelecionado := FInstrutores[lIndice]
   else
     FInstrutorSelecionado := nil;
-end;
-
-function TfrmCadastroInstrutor.ObterInstrutorSelecionado: TInstrutorModel;
-begin
-  Result := FInstrutorSelecionado;
 end;
 
 procedure TfrmCadastroInstrutor.AbrirCadastro(const pInstrutor: TInstrutorModel);

@@ -29,7 +29,6 @@ type
   TdmPrincipal = class(TDataModule)
     fdConexao: TFDConnection;
     fdDriverLink: TFDPhysPgDriverLink;
-    fdTableInstrutores: TFDTable;
     procedure DataModuleCreate(Sender: TObject);
   private
     class var FInstancia: TdmPrincipal;
@@ -71,7 +70,7 @@ begin
   fdConexao.Params.Add('Server=localhost');
   fdConexao.Params.Add('Database=postgres');
   fdConexao.Params.Add('User_Name=postgres');
-  fdConexao.Params.Add('Password=123');
+  fdConexao.Params.Add('Password=#abc123#');
   fdConexao.Params.Add('Port=5432');
   fdConexao.LoginPrompt := False;
   fdConexao.Connected := True;

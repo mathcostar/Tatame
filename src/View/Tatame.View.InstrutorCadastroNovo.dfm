@@ -69,8 +69,9 @@ object frmNovoInstrutor: TfrmNovoInstrutor
       Top = 159
       Width = 97
       Height = 17
-      Caption = 'Mostrar senha'
+      Caption = 'Exibir senha'
       TabOrder = 3
+      OnClick = chkMostrarSenhaClick
     end
   end
   object grpEndereco: TGroupBox

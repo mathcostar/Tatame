@@ -18,12 +18,4 @@ object dmPrincipal: TdmPrincipal
     Left = 40
     Top = 32
   end
-  object fdTableInstrutores: TFDTable
-    IndexFieldNames = 'id'
-    Connection = fdConexao
-    ResourceOptions.AssignedValues = [rvEscapeExpand]
-    TableName = 'tatame.instrutores'
-    Left = 40
-    Top = 120
-  end
 end

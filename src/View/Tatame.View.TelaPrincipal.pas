@@ -40,7 +40,7 @@ type
     lblDivisaoDois: TLabel;
     procedure btnInstrutoresClick(Sender: TObject);
     procedure btnAlunosClick(Sender: TObject);
-  private
+    procedure btnLogoffClick(Sender: TObject);
   end;
 
 implementation
@@ -61,6 +61,11 @@ begin
   finally
     FreeAndNil(lInstrutorCadastro);
   end;
+end;
+
+procedure TfrmPrincipal.btnLogoffClick(Sender: TObject);
+begin
+  ModalResult := mrCancel;
 end;
 
 procedure TfrmPrincipal.btnAlunosClick(Sender: TObject);

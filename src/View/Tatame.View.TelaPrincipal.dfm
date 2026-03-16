@@ -12,7 +12,7 @@ object frmPrincipal: TfrmPrincipal
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
-  Position = poDesktopCenter
+  Position = poScreenCenter
   TextHeight = 15
   object pnlBotoes: TPanel
     Left = 0
@@ -31,7 +31,7 @@ object frmPrincipal: TfrmPrincipal
       Height = 65
       Align = alLeft
       Caption = 'Instrutores'
-      ImageIndex = 1
+      ImageIndex = 3
       Images = imglstPrincipal
       Layout = blGlyphTop
       OnClick = btnInstrutoresClick
@@ -96,6 +96,7 @@ object frmPrincipal: TfrmPrincipal
       ImageIndex = 1
       Images = imglstPrincipal
       Layout = blGlyphTop
+      OnClick = btnLogoffClick
       ExplicitLeft = 505
       ExplicitTop = -4
       ExplicitHeight = 119

@@ -12,7 +12,7 @@ object frmLogin: TfrmLogin
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
-  Position = poDesktopCenter
+  Position = poScreenCenter
   TextHeight = 15
   object pnlLogin: TPanel
     Left = 0
@@ -56,12 +56,21 @@ object frmLogin: TfrmLogin
     end
     object btnEntrar: TButton
       Left = 200
-      Top = 44
+      Top = 25
       Width = 75
-      Height = 25
+      Height = 23
       Caption = 'Entrar'
       TabOrder = 2
       OnClick = btnEntrarClick
+    end
+    object chkMostrarSenha: TCheckBox
+      Left = 194
+      Top = 66
+      Width = 83
+      Height = 17
+      Caption = 'Exibir senha'
+      TabOrder = 3
+      OnClick = chkMostrarSenhaClick
     end
   end
   object pnlPrimeiroAcesso: TPanel
@@ -78,8 +87,8 @@ object frmLogin: TfrmLogin
     object lblPrimeiroAcesso: TLabel
       Left = 1
       Top = 1
-      Width = 159
-      Height = 15
+      Width = 287
+      Height = 33
       Align = alClient
       Alignment = taCenter
       Caption = 'Primeiro acesso? Clique aqui!'
@@ -93,6 +102,8 @@ object frmLogin: TfrmLogin
       ParentFont = False
       Layout = tlCenter
       OnClick = lblPrimeiroAcessoClick
+      ExplicitWidth = 159
+      ExplicitHeight = 15
     end
   end
 end

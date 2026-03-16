@@ -17,10 +17,13 @@ type
     edtSenha: TEdit;
     btnEntrar: TButton;
     lblPrimeiroAcesso: TLabel;
+    chkMostrarSenha: TCheckBox;
     procedure btnEntrarClick(Sender: TObject);
     procedure lblPrimeiroAcessoClick(Sender: TObject);
+    procedure chkMostrarSenhaClick(Sender: TObject);
   private
     procedure Entrar;
+    procedure LimparCampos;
   end;
 
 var
@@ -40,10 +43,18 @@ begin
   Entrar();
 end;
 
+procedure TfrmLogin.chkMostrarSenhaClick(Sender: TObject);
+begin
+  if chkMostrarSenha.Checked then
+    edtSenha.PasswordChar := #0
+  else
+    edtSenha.PasswordChar := '*';
+end;
+
 procedure TfrmLogin.Entrar;
 var
   lInstrutorService: TInstrutorService;
-  lTela: TfrmPrincipal;
+  lTelaPrincipal: TfrmPrincipal;
 begin
   lInstrutorService := TInstrutorService.Create();
   try
@@ -52,11 +63,16 @@ begin
         ShowMessage('Login inválido.' + sLineBreak + 'Caso seja seu primeiro acesso, por favor clique abaixo em ''Primeiro acesso''.')
       else
         begin
-          lTela := TfrmPrincipal.Create(nil);
+          lTelaPrincipal := TfrmPrincipal.Create(nil);
           try
-            lTela.ShowModal();
+            Self.Hide();
+            LimparCampos();
+            lTelaPrincipal.ShowModal();
           finally
-            FreeAndNil(lTela);
+            if lTelaPrincipal.ModalResult = mrCancel then
+              Self.Show();
+
+            FreeAndNil(lTelaPrincipal);
           end;
         end;
     except
@@ -78,6 +94,12 @@ begin
   finally
     FreeAndNil(lInstrutorCadastro);
   end;
+end;
+
+procedure TfrmLogin.LimparCampos;
+begin
+  edtUsuario.Clear();
+  edtSenha.Clear();
 end;
 
 end.
