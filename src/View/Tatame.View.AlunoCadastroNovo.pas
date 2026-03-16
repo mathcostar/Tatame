@@ -51,6 +51,8 @@ type
     procedure PreencherInstrutores;
     procedure Salvar;
     procedure BuscarCEP;
+
+    function Validar: Boolean;
   public
     destructor Destroy; override;
 
@@ -111,9 +113,21 @@ begin
     cmbInstrutor.Items.AddObject(lInstrutor.Nome, lInstrutor);
 end;
 
+function TfrmNovoAluno.Validar: Boolean;
+begin
+  Result := (edtNome.Text <> '') and
+    (edtCEP.Text <> '') and
+    (edtLogradouro.Text  <> '') and
+    (edtEstado.Text <> '') and
+    (edtCidade.Text <> '') and
+    (edtBairro.Text <> '') and
+    (cmbFaixa.ItemIndex > -1) and
+    (cmbInstrutor.ItemIndex > -1);
+end;
+
 procedure TfrmNovoAluno.CarregarAluno(const pAluno: TAlunoModel);
 var
-  lI: Integer;
+  I: Integer;
 begin
   FAlunoID := pAluno.ID;
 
@@ -124,20 +138,20 @@ begin
   edtCidade.Text     := pAluno.Endereco.Cidade;
   edtBairro.Text     := pAluno.Endereco.Bairro;
 
-  for lI := 0 to cmbFaixa.Items.Count - 1 do
+  for I := 0 to cmbFaixa.Items.Count - 1 do
     begin
-      if Integer(cmbFaixa.Items.Objects[lI]) = pAluno.FaixaID then
+      if Integer(cmbFaixa.Items.Objects[I]) = pAluno.FaixaID then
         begin
-          cmbFaixa.ItemIndex := lI;
+          cmbFaixa.ItemIndex := I;
           Break;
         end;
     end;
 
-  for lI := 0 to cmbInstrutor.Items.Count - 1 do
+  for I := 0 to cmbInstrutor.Items.Count - 1 do
     begin
-      if TInstrutorModel(cmbInstrutor.Items.Objects[lI]).ID = pAluno.InstrutorID then
+      if TInstrutorModel(cmbInstrutor.Items.Objects[I]).ID = pAluno.InstrutorID then
         begin
-          cmbInstrutor.ItemIndex := lI;
+          cmbInstrutor.ItemIndex := I;
           Break;
         end;
     end;
@@ -198,22 +212,10 @@ var
   lAlunoService: TAlunoService;
   lAluno: TAlunoModel;
 begin
-  if edtNome.Text = '' then
+  if not Validar() then
     begin
-      ShowMessage('Por favor, informe o nome do aluno.');
-      Exit;
-    end;
-
-  if cmbFaixa.ItemIndex < 0 then
-    begin
-      ShowMessage('Por favor, selecione a faixa do aluno.');
-      Exit;
-    end;
-
-  if cmbInstrutor.ItemIndex < 0 then
-    begin
-      ShowMessage('Por favor, selecione o instrutor do aluno.');
-      Exit;
+      ShowMessage('Por favor, preencha todos os campos.');
+      Exit();
     end;
 
   lAluno := TAlunoModel.Create();

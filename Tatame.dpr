@@ -16,7 +16,9 @@ uses
   Tatame.Service.Aluno in 'src\Service\Tatame.Service.Aluno.pas',
   Tatame.Service.ViaCEP in 'src\Service\Tatame.Service.ViaCEP.pas',
   Tatame.View.AlunoCadastro in 'src\View\Tatame.View.AlunoCadastro.pas' {frmCadastroAluno},
-  Tatame.View.AlunoCadastroNovo in 'src\View\Tatame.View.AlunoCadastroNovo.pas' {Form2};
+  Tatame.View.AlunoCadastroNovo in 'src\View\Tatame.View.AlunoCadastroNovo.pas' {Form2},
+  Tatame.View.RelatorioInstrutores in 'src\View\Relatorios\Tatame.View.RelatorioInstrutores.pas' {frmRelatorioInstrutores},
+  Tatame.View.RelatorioAlunos in 'src\View\Relatorios\Tatame.View.RelatorioAlunos.pas' {frmRelatorioAlunos};
 
 {$R *.res}
 

@@ -23,12 +23,27 @@ uses
   FireDAC.DApt.Intf,
   FireDAC.DApt,
   FireDAC.Comp.DataSet,
-  FireDAC.UI.Intf;
+  FireDAC.UI.Intf, Datasnap.DBClient;
 
 type
   TdmPrincipal = class(TDataModule)
     fdConexao: TFDConnection;
     fdDriverLink: TFDPhysPgDriverLink;
+    dtsInstrutores: TDataSource;
+    tblInstrutores: TFDTable;
+    tblInstrutoresnome: TWideStringField;
+    tblInstrutoresusuario: TWideStringField;
+    tblInstrutoresid: TIntegerField;
+    dtsAlunos: TDataSource;
+    tblAlunos: TFDTable;
+    tblAlunosid: TIntegerField;
+    tblAlunosnome: TWideStringField;
+    dtsFaixas: TDataSource;
+    tblFaixas: TFDTable;
+    tblAlunosfaixa_id: TSmallintField;
+    tblAlunosinstrutor_id: TIntegerField;
+    tblAlunosnome_instrutor: TWideStringField;
+    tblAlunosfaixa: TStringField;
     procedure DataModuleCreate(Sender: TObject);
   private
     class var FInstancia: TdmPrincipal;
@@ -43,7 +58,13 @@ type
     class procedure LiberarInstancia;
   end;
 
+var
+  dmPrincipal: TdmPrincipal;
+
 implementation
+
+uses
+  Vcl.Dialogs;
 
 {$R *.dfm}
 
@@ -83,6 +104,15 @@ begin
     end
   else
     ConectarBancoSistema();
+
+  if not tblInstrutores.Active then
+    tblInstrutores.Open();
+
+  if not tblAlunos.Active then
+    tblAlunos.Open();
+
+  if not tblFaixas.Active then
+    tblFaixas.Open();
 end;
 
 function TdmPrincipal.BancoExiste: Boolean;

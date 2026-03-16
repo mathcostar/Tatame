@@ -69,9 +69,10 @@ begin
             LimparCampos();
             lTelaPrincipal.ShowModal();
           finally
-            if lTelaPrincipal.ModalResult = mrCancel then
-              Self.Show();
-
+            if lTelaPrincipal.FLogoff then
+              Self.Show()
+            else
+              Application.Terminate;
             FreeAndNil(lTelaPrincipal);
           end;
         end;

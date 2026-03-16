@@ -66,6 +66,7 @@ object frmPrincipal: TfrmPrincipal
       ImageIndex = 2
       Images = imglstPrincipal
       Layout = blGlyphTop
+      OnClick = btnRelatorioInstrutoresClick
       ExplicitLeft = 225
       ExplicitTop = 1
       ExplicitHeight = 71
@@ -81,6 +82,7 @@ object frmPrincipal: TfrmPrincipal
       ImageIndex = 2
       Images = imglstPrincipal
       Layout = blGlyphTop
+      OnClick = btnRelatorioAlunosClick
       ExplicitLeft = 337
       ExplicitTop = 1
       ExplicitHeight = 71

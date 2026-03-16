@@ -47,6 +47,8 @@ type
 
     procedure Salvar;
     procedure BuscarCEP;
+
+    function Validar: Boolean;
   public
     procedure CarregarInstrutor(const pInstrutor: TInstrutorModel);
   end;
@@ -137,6 +139,12 @@ var
   lInstrutorService: TInstrutorService;
   lInstrutor: TInstrutorModel;
 begin
+  if not Validar() then
+    begin
+      ShowMessage('Por favor, preencha todos os campos.');
+      Exit();
+    end;
+
   lInstrutor := TInstrutorModel.Create();
   try
     lInstrutor.ID              := FInstrutorID;
@@ -165,6 +173,18 @@ begin
   finally
     lInstrutor.Free();
   end;
+end;
+
+function TfrmNovoInstrutor.Validar: Boolean;
+begin
+  Result := (edtNome.Text <> '') and
+    (edtCEP.Text <> '') and
+    (edtLogradouro.Text  <> '') and
+    (edtEstado.Text <> '') and
+    (edtCidade.Text <> '') and
+    (edtBairro.Text <> '') and
+    (edtUsuario.Text <> '') and
+    (edtSenha.Text <> '');
 end;
 
 end.

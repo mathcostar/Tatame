@@ -160,6 +160,7 @@ object frmNovoInstrutor: TfrmNovoInstrutor
     Height = 25
     Caption = 'Cancelar'
     TabOrder = 2
+    OnClick = btnCancelarClick
   end
   object btnGravar: TButton
     Left = 256

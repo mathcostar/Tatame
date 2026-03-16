@@ -152,6 +152,14 @@
             <Form>Form2</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="src\View\Relatorios\Tatame.View.RelatorioInstrutores.pas">
+            <Form>frmRelatorioInstrutores</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\View\Relatorios\Tatame.View.RelatorioAlunos.pas">
+            <Form>frmRelatorioAlunos</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -16,7 +16,8 @@ uses
   Vcl.ExtCtrls,
   Vcl.Grids,
   System.Generics.Collections,
-  Tatame.Model.Aluno;
+  Tatame.Model.Aluno,
+  System.UITypes;
 
 type
   TfrmCadastroAluno = class(TForm)
@@ -219,7 +220,7 @@ begin
   if not Assigned(FAlunoSelecionado) then
     begin
       ShowMessage('Por favor, selecione um aluno para editar.');
-      Exit;
+      Exit();
     end;
 
   AbrirCadastro(FAlunoSelecionado);
@@ -232,12 +233,12 @@ begin
   if not Assigned(FAlunoSelecionado) then
     begin
       ShowMessage('Por favor, selecione um aluno para excluir.');
-      Exit;
+      Exit();
     end;
 
   if MessageDlg('Deseja realmente excluir o aluno "' + FAlunoSelecionado.Nome + '"?',
-                mtConfirmation, [mbYes, mbNo], 0) <> mrYes then
-    Exit;
+    mtConfirmation, [mbYes, mbNo], 0) <> mrYes then
+    Exit();
 
   lAlunoService := TAlunoService.Create();
   try
