@@ -18,6 +18,7 @@ type
 
     function CarregarLista: TObjectList<TInstrutorModel>;
     function Autenticar(const pUsuario: string; const pSenha: string): Boolean;
+    function PesquisarPorFiltro(const pFiltro: string): TObjectList<TInstrutorModel>;
   end;
 
   TInstrutorDAO = class(TInterfacedObject, IInstrutorDAO)
@@ -31,6 +32,7 @@ type
 
     function CarregarLista: TObjectList<TInstrutorModel>;
     function Autenticar(const pUsuario: string; const pSenha: string): Boolean;
+    function PesquisarPorFiltro(const pFiltro: string): TObjectList<TInstrutorModel>;
   end;
 
 implementation
@@ -165,6 +167,57 @@ begin
     lQuery.Open();
 
     Result := not lQuery.IsEmpty();
+  finally
+    lQuery.Free();
+  end;
+end;
+
+function TInstrutorDAO.PesquisarPorFiltro(const pFiltro: string): TObjectList<TInstrutorModel>;
+var
+  lQuery: TFDQuery;
+  lInstrutor: TInstrutorModel;
+begin
+  Result := TObjectList<TInstrutorModel>.Create(True);
+
+  lQuery := TFDQuery.Create(nil);
+  try
+    lQuery.Connection := FConexao;
+
+    lQuery.SQL.Add('SELECT *');
+    lQuery.SQL.Add('  FROM tatame.instrutores');
+
+    if Trim(pFiltro) <> '' then
+      begin
+        lQuery.SQL.Add(' WHERE LOWER(nome) LIKE :filtro');
+        lQuery.SQL.Add('    OR LOWER(usuario) LIKE :filtro');
+        lQuery.SQL.Add('    OR LOWER(cidade) LIKE :filtro');
+        lQuery.SQL.Add('    OR LOWER(estado) LIKE :filtro');
+
+        lQuery.ParamByName('filtro').AsString := '%' + pFiltro.ToLower + '%';
+      end;
+
+    lQuery.SQL.Add(' ORDER BY nome');
+
+    lQuery.Open;
+
+    while not lQuery.Eof do
+      begin
+        lInstrutor := TInstrutorModel.Create();
+
+        lInstrutor.ID                  := lQuery.FieldByName('id').AsInteger;
+        lInstrutor.Nome                := lQuery.FieldByName('nome').AsString;
+        lInstrutor.Usuario             := lQuery.FieldByName('usuario').AsString;
+        lInstrutor.Senha               := lQuery.FieldByName('senha').AsString;
+        lInstrutor.Endereco.CEP        := lQuery.FieldByName('cep').AsString;
+        lInstrutor.Endereco.Logradouro := lQuery.FieldByName('logradouro').AsString;
+        lInstrutor.Endereco.Estado     := lQuery.FieldByName('estado').AsString;
+        lInstrutor.Endereco.Cidade     := lQuery.FieldByName('cidade').AsString;
+        lInstrutor.Endereco.Bairro     := lQuery.FieldByName('bairro').AsString;
+
+        Result.Add(lInstrutor);
+        lQuery.Next;
+      end;
+
   finally
     lQuery.Free();
   end;

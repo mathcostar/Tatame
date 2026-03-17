@@ -52,7 +52,8 @@ implementation
 
 uses
   Tatame.Service.Aluno,
-  Tatame.View.AlunoCadastroNovo;
+  Tatame.View.AlunoCadastroNovo,
+  Math;
 
 {$R *.dfm}
 
@@ -115,57 +116,37 @@ end;
 
 procedure TfrmCadastroAluno.Pesquisar;
 var
-  lAluno: TAlunoModel;
-  lFiltro: string;
+  lAlunoService: TAlunoService;
 begin
   FreeAndNil(FAlunos);
 
-  lFiltro := edtPesquisar.Text;
-
-  FAlunos := TObjectList<TAlunoModel>.Create(False);
-
-  for lAluno in FTodosAlunos do
-    begin
-      if (lFiltro = '') or
-         (lAluno.Nome.ToLower().Contains(lFiltro)) or
-         (lAluno.NomeFaixa.ToLower().Contains(lFiltro)) or
-         (lAluno.NomeInstrutor.ToLower().Contains(lFiltro)) then
-        FAlunos.Add(lAluno);
-    end;
+  lAlunoService := TAlunoService.Create;
+  try
+    FAlunos := lAlunoService.PesquisarPorFiltro(edtPesquisar.Text);
+  finally
+    lAlunoService.Free;
+  end;
 
   FAlunoSelecionado := nil;
-
   PreencherGrid();
 end;
 
 procedure TfrmCadastroAluno.PreencherGrid;
 var
+  I: Integer;
   lAluno: TAlunoModel;
-  lLinha: Integer;
 begin
-  if FAlunos.Count = 0 then
-    sgdAlunos.RowCount := 2
-  else
-    sgdAlunos.RowCount := FAlunos.Count + 1;
+  sgdAlunos.RowCount := Max(2, FAlunos.Count + 1);
 
-  for lLinha := 1 to sgdAlunos.RowCount - 1 do
-    begin
-      sgdAlunos.Cells[0, lLinha] := '';
-      sgdAlunos.Cells[1, lLinha] := '';
-      sgdAlunos.Cells[2, lLinha] := '';
-      sgdAlunos.Cells[3, lLinha] := '';
-    end;
+  for i := 0 to FAlunos.Count - 1 do
+  begin
+    lAluno := FAlunos[i];
 
-  lLinha := 1;
-  for lAluno in FAlunos do
-    begin
-      sgdAlunos.Cells[0, lLinha] := lAluno.Nome;
-      sgdAlunos.Cells[1, lLinha] := lAluno.NomeFaixa;
-      sgdAlunos.Cells[2, lLinha] := lAluno.NomeInstrutor;
-      sgdAlunos.Cells[3, lLinha] := lAluno.Endereco.Cidade;
-
-      Inc(lLinha);
-    end;
+    sgdAlunos.Cells[0, i + 1] := lAluno.Nome;
+    sgdAlunos.Cells[1, i + 1] := lAluno.NomeFaixa;
+    sgdAlunos.Cells[2, i + 1] := lAluno.NomeInstrutor;
+    sgdAlunos.Cells[3, i + 1] := lAluno.Endereco.Cidade;
+  end;
 end;
 
 procedure TfrmCadastroAluno.sgdAlunosClick(Sender: TObject);

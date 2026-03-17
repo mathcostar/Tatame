@@ -109,11 +109,27 @@ object frmNovoAluno: TfrmNovoAluno
       Height = 15
       Caption = 'Bairro:'
     end
+    object lblConsultandoCEP: TLabel
+      Left = 18
+      Top = 74
+      Width = 100
+      Height = 15
+      Caption = 'Consultando CEP...'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsItalic]
+      ParentFont = False
+      Visible = False
+    end
     object edtCEP: TEdit
       Left = 18
       Top = 48
       Width = 79
       Height = 23
+      MaxLength = 8
+      NumbersOnly = True
       TabOrder = 0
       OnExit = edtCEPExit
     end

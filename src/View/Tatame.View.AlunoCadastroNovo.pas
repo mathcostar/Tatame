@@ -15,6 +15,7 @@ uses
   Vcl.StdCtrls,
   Tatame.Model.Aluno,
   Tatame.Model.Instrutor,
+  Tatame.Model.Endereco,
   System.Generics.Collections;
 
 type
@@ -32,6 +33,7 @@ type
     lblEstado: TLabel;
     lblCidade: TLabel;
     lblBairro: TLabel;
+    lblConsultandoCEP: TLabel;
     edtCEP: TEdit;
     edtLogradouro: TEdit;
     edtEstado: TEdit;
@@ -44,13 +46,17 @@ type
     procedure btnCancelarClick(Sender: TObject);
     procedure edtCEPExit(Sender: TObject);
   private
-    FAlunoID: Integer;
-    FInstrutores: TObjectList<TInstrutorModel>;
+    FAlunoID     : Integer;
+    FInstrutores : TObjectList<TInstrutorModel>;
+    FCEPBuscando : Boolean;
 
     procedure PreencherFaixas;
     procedure PreencherInstrutores;
     procedure Salvar;
     procedure BuscarCEP;
+
+    procedure OnCEPEncontrado(const pEndereco: TEnderecoModel);
+    procedure OnCEPErro(const pMensagem: string);
 
     function Validar: Boolean;
   public
@@ -64,27 +70,26 @@ implementation
 uses
   Tatame.Service.Aluno,
   Tatame.Service.Instrutor,
-  Tatame.Service.ViaCEP,
-  Tatame.Model.Endereco;
+  Tatame.Service.ViaCEP;
 
 {$R *.dfm}
 
 destructor TfrmNovoAluno.Destroy;
 begin
-  FInstrutores.Free();
-
+  FInstrutores.Free;
   inherited;
 end;
 
 procedure TfrmNovoAluno.FormCreate(Sender: TObject);
 begin
+  FCEPBuscando := False;
   PreencherFaixas();
   PreencherInstrutores();
 end;
 
 procedure TfrmNovoAluno.PreencherFaixas;
 begin
-  cmbFaixa.Items.Clear();
+  cmbFaixa.Items.Clear;
   cmbFaixa.Items.AddObject('Branca',  TObject(1));
   cmbFaixa.Items.AddObject('Amarela', TObject(2));
   cmbFaixa.Items.AddObject('Laranja', TObject(3));
@@ -100,9 +105,9 @@ var
   lInstrutorService: TInstrutorService;
   lInstrutor: TInstrutorModel;
 begin
-  lInstrutorService := TInstrutorService.Create();
+  lInstrutorService := TInstrutorService.Create;
   try
-    FInstrutores := lInstrutorService.CarregarLista();
+    FInstrutores := lInstrutorService.CarregarLista;
   finally
     lInstrutorService.Free();
   end;
@@ -115,14 +120,14 @@ end;
 
 function TfrmNovoAluno.Validar: Boolean;
 begin
-  Result := (edtNome.Text <> '') and
-    (edtCEP.Text <> '') and
-    (edtLogradouro.Text  <> '') and
-    (edtEstado.Text <> '') and
-    (edtCidade.Text <> '') and
-    (edtBairro.Text <> '') and
-    (cmbFaixa.ItemIndex > -1) and
-    (cmbInstrutor.ItemIndex > -1);
+  Result := (edtNome.Text <> '')       and
+            (edtCEP.Text <> '')        and
+            (edtLogradouro.Text <> '') and
+            (edtEstado.Text <> '')     and
+            (edtCidade.Text <> '')     and
+            (edtBairro.Text <> '')     and
+            (cmbFaixa.ItemIndex > -1)  and
+            (cmbInstrutor.ItemIndex > -1);
 end;
 
 procedure TfrmNovoAluno.CarregarAluno(const pAluno: TAlunoModel);
@@ -139,22 +144,59 @@ begin
   edtBairro.Text     := pAluno.Endereco.Bairro;
 
   for I := 0 to cmbFaixa.Items.Count - 1 do
-    begin
-      if Integer(cmbFaixa.Items.Objects[I]) = pAluno.FaixaID then
-        begin
-          cmbFaixa.ItemIndex := I;
-          Break;
-        end;
-    end;
+    if Integer(cmbFaixa.Items.Objects[I]) = pAluno.FaixaID then
+      begin
+        cmbFaixa.ItemIndex := I;
+        Break;
+      end;
 
   for I := 0 to cmbInstrutor.Items.Count - 1 do
-    begin
-      if TInstrutorModel(cmbInstrutor.Items.Objects[I]).ID = pAluno.InstrutorID then
-        begin
-          cmbInstrutor.ItemIndex := I;
-          Break;
-        end;
-    end;
+    if TInstrutorModel(cmbInstrutor.Items.Objects[I]).ID = pAluno.InstrutorID then
+      begin
+        cmbInstrutor.ItemIndex := I;
+        Break;
+      end;
+end;
+
+procedure TfrmNovoAluno.edtCEPExit(Sender: TObject);
+begin
+  BuscarCEP;
+end;
+
+procedure TfrmNovoAluno.BuscarCEP;
+begin
+  if edtCEP.Text = '' then
+    Exit();
+
+  if FCEPBuscando then
+    Exit();
+
+  FCEPBuscando              := True;
+  grpEndereco.Enabled       := False;
+  lblConsultandoCEP.Visible := True;
+
+  TCEPBuscaThread.Create(edtCEP.Text, OnCEPEncontrado, OnCEPErro).Start;
+end;
+
+procedure TfrmNovoAluno.OnCEPEncontrado(const pEndereco: TEnderecoModel);
+begin
+  edtLogradouro.Text := pEndereco.Logradouro;
+  edtBairro.Text     := pEndereco.Bairro;
+  edtCidade.Text     := pEndereco.Cidade;
+  edtEstado.Text     := pEndereco.Estado;
+
+  lblConsultandoCEP.Visible := False;
+  grpEndereco.Enabled       := True;
+  FCEPBuscando              := False;
+end;
+
+procedure TfrmNovoAluno.OnCEPErro(const pMensagem: string);
+begin
+  lblConsultandoCEP.Visible := False;
+  grpEndereco.Enabled       := True;
+  FCEPBuscando              := False;
+
+  ShowMessage(pMensagem);
 end;
 
 procedure TfrmNovoAluno.btnGravarClick(Sender: TObject);
@@ -167,58 +209,18 @@ begin
   ModalResult := mrCancel;
 end;
 
-procedure TfrmNovoAluno.edtCEPExit(Sender: TObject);
-begin
-  BuscarCEP();
-end;
-
-procedure TfrmNovoAluno.BuscarCEP;
-var
-  lViaCEPService: TViaCEPService;
-  lEndereco: TEnderecoModel;
-begin
-  if edtCEP.Text = '' then
-    Exit;
-
-  lViaCEPService := TViaCEPService.Create();
-  try
-    try
-      lEndereco := lViaCEPService.BuscarEndereco(edtCEP.Text);
-      try
-        if lEndereco.Cidade = '' then
-          begin
-            ShowMessage('CEP não encontrado.');
-            Exit;
-          end;
-
-        edtLogradouro.Text := lEndereco.Logradouro;
-        edtBairro.Text     := lEndereco.Bairro;
-        edtCidade.Text     := lEndereco.Cidade;
-        edtEstado.Text     := lEndereco.Estado;
-      finally
-        lEndereco.Free();
-      end;
-    except
-      on E: Exception do
-        ShowMessage('Erro ao buscar CEP: ' + E.Message);
-    end;
-  finally
-    lViaCEPService.Free();
-  end;
-end;
-
 procedure TfrmNovoAluno.Salvar;
 var
   lAlunoService: TAlunoService;
   lAluno: TAlunoModel;
 begin
-  if not Validar() then
+  if not Validar then
     begin
       ShowMessage('Por favor, preencha todos os campos.');
       Exit();
     end;
 
-  lAluno := TAlunoModel.Create();
+  lAluno := TAlunoModel.Create;
   try
     lAluno.ID          := FAlunoID;
     lAluno.Nome        := edtNome.Text;
@@ -230,7 +232,7 @@ begin
     lAluno.Endereco.Cidade     := edtCidade.Text;
     lAluno.Endereco.Bairro     := edtBairro.Text;
 
-    lAlunoService := TAlunoService.Create();
+    lAlunoService := TAlunoService.Create;
     try
       try
         lAlunoService.Salvar(lAluno);

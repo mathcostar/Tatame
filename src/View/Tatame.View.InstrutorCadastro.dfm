@@ -73,14 +73,16 @@ object frmCadastroInstrutor: TfrmCadastroInstrutor
       Width = 596
       Height = 23
       Align = alTop
+      BevelOuter = bvNone
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -12
       Font.Name = 'Segoe UI'
-      Font.Style = [fsItalic]
+      Font.Style = []
       ParentFont = False
       TabOrder = 0
       TextHint = 'Comece a pesquisar...'
+      OnChange = edtPesquisarChange
     end
     object sgdInstrutores: TStringGrid
       Left = 1

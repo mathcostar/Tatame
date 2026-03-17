@@ -77,7 +77,7 @@ object frmCadastroAluno: TfrmCadastroAluno
       Font.Color = clWindowText
       Font.Height = -12
       Font.Name = 'Segoe UI'
-      Font.Style = [fsItalic]
+      Font.Style = []
       ParentFont = False
       TabOrder = 0
       TextHint = 'Comece a pesquisar...'

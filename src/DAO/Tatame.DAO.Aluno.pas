@@ -17,6 +17,7 @@ type
     procedure Excluir(const pAlunoID: Integer);
 
     function CarregarLista: TObjectList<TAlunoModel>;
+    function PesquisarPorFiltro(const pFiltro: string): TObjectList<TAlunoModel>;
   end;
 
   TAlunoDAO = class(TInterfacedObject, IAlunoDAO)
@@ -31,6 +32,7 @@ type
     procedure Excluir(const pAlunoID: Integer);
 
     function CarregarLista: TObjectList<TAlunoModel>;
+    function PesquisarPorFiltro(const pFiltro: string): TObjectList<TAlunoModel>;
   end;
 
 implementation
@@ -155,6 +157,35 @@ begin
     Result := CarregarDaQuery(lQuery);
   finally
     lQuery.Free();
+  end;
+end;
+
+function TAlunoDAO.PesquisarPorFiltro(const pFiltro: string): TObjectList<TAlunoModel>;
+var
+  lQuery: TFDQuery;
+begin
+  lQuery := TFDQuery.Create(nil);
+  try
+    lQuery.Connection := FConexao;
+
+    lQuery.SQL.Add('SELECT a.*,');
+    lQuery.SQL.Add('       f.nome AS nome_faixa,');
+    lQuery.SQL.Add('       i.nome AS nome_instrutor');
+    lQuery.SQL.Add('  FROM tatame.alunos a');
+    lQuery.SQL.Add('  LEFT JOIN tatame.faixas f ON f.id = a.faixa_id');
+    lQuery.SQL.Add('  LEFT JOIN tatame.instrutores i ON i.id = a.instrutor_id');
+    lQuery.SQL.Add(' WHERE LOWER(a.nome) LIKE :filtro');
+    lQuery.SQL.Add('    OR LOWER(f.nome) LIKE :filtro');
+    lQuery.SQL.Add('    OR LOWER(i.nome) LIKE :filtro');
+    lQuery.SQL.Add(' ORDER BY a.nome');
+
+    lQuery.ParamByName('filtro').AsString := '%' + pFiltro.ToLower + '%';
+
+    lQuery.Open;
+
+    Result := CarregarDaQuery(lQuery);
+  finally
+    lQuery.Free;
   end;
 end;
 

@@ -33,6 +33,7 @@ type
     procedure btnExcluirClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure sgdInstrutoresClick(Sender: TObject);
+    procedure edtPesquisarChange(Sender: TObject);
   private
     FInstrutores: TObjectList<TInstrutorModel>;
     FInstrutorSelecionado: TInstrutorModel;
@@ -57,6 +58,23 @@ begin
   FInstrutores.Free();
 
   inherited;
+end;
+
+procedure TfrmCadastroInstrutor.edtPesquisarChange(Sender: TObject);
+var
+  lService: TInstrutorService;
+begin
+  FreeAndNil(FInstrutores);
+  FInstrutorSelecionado := nil;
+
+  lService := TInstrutorService.Create;
+  try
+    FInstrutores := lService.PesquisarPorFiltro(edtPesquisar.Text);
+  finally
+    lService.Free;
+  end;
+
+  PreencherGrid;
 end;
 
 procedure TfrmCadastroInstrutor.FormShow(Sender: TObject);

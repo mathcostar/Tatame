@@ -13,6 +13,7 @@ type
     procedure Excluir(const pAlunoID: Integer);
 
     function CarregarLista: TObjectList<TAlunoModel>;
+    function PesquisarPorFiltro(const pFiltro: string): TObjectList<TAlunoModel>;
   end;
 
   TAlunoService = class(TInterfacedObject, IAlunoService)
@@ -21,6 +22,7 @@ type
     procedure Excluir(const pAlunoID: Integer);
 
     function CarregarLista: TObjectList<TAlunoModel>;
+    function PesquisarPorFiltro(const pFiltro: string): TObjectList<TAlunoModel>;
   end;
 
 implementation
@@ -60,6 +62,14 @@ var
 begin
   lDAOAluno := TAlunoDAO.Create();
   Result := lDAOAluno.CarregarLista();
+end;
+
+function TAlunoService.PesquisarPorFiltro(const pFiltro: string): TObjectList<TAlunoModel>;
+var
+  lDAOAluno: IAlunoDAO;
+begin
+  lDAOAluno := TAlunoDAO.Create();
+  Result := lDAOAluno.PesquisarPorFiltro(pFiltro);
 end;
 
 end.

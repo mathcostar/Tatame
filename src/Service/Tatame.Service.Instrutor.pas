@@ -20,6 +20,7 @@ type
 
     function CarregarLista: TObjectList<TInstrutorModel>;
     function Autenticar(const pUsuario: string; const pSenha: string): Boolean;
+    function PesquisarPorFiltro(const pFiltro: string): TObjectList<TInstrutorModel>;
   end;
 
   TInstrutorService = class(TInterfacedObject, IInstrutorService)
@@ -31,6 +32,7 @@ type
 
     function CarregarLista: TObjectList<TInstrutorModel>;
     function Autenticar(const pUsuario: string; const pSenha: string): Boolean;
+    function PesquisarPorFiltro(const pFiltro: string): TObjectList<TInstrutorModel>;
   end;
 
 implementation
@@ -42,26 +44,29 @@ uses
 
 procedure TInstrutorService.Salvar(const pInstrutor: TInstrutorModel);
 var
-  lDAOInstrutor: TInstrutorDAO;
+  lDAOInstrutor: IInstrutorDAO;
 begin
   lDAOInstrutor := TInstrutorDAO.Create();
-  try
-    lDAOInstrutor.Salvar(pInstrutor);
-  finally
-    lDAOInstrutor.Free();
-  end;
+  lDAOInstrutor.Salvar(pInstrutor);
 end;
 
 procedure TInstrutorService.Excluir(const pInstrutorID: Integer);
 var
-  lDAOInstrutor: TInstrutorDAO;
+  lDAOInstrutor: IInstrutorDAO;
 begin
   lDAOInstrutor := TInstrutorDAO.Create();
-  try
-    lDAOInstrutor.Excluir(pInstrutorID);
-  finally
-    lDAOInstrutor.Free();
-  end;
+  lDAOInstrutor.Excluir(pInstrutorID);
+end;
+
+function TInstrutorService.Autenticar(const pUsuario, pSenha: string): Boolean;
+var
+  lDAOInstrutor: IInstrutorDAO;
+begin
+  if not DadosValidos(pUsuario, pSenha) then
+    raise EDadosInvalido.Create;
+
+  lDAOInstrutor := TInstrutorDAO.Create();
+  Result := lDAOInstrutor.Autenticar(pUsuario, pSenha);
 end;
 
 function TInstrutorService.CarregarLista: TObjectList<TInstrutorModel>;
@@ -72,24 +77,17 @@ begin
   Result := lDAOInstrutor.CarregarLista();
 end;
 
-function TInstrutorService.Autenticar(const pUsuario: string; const pSenha: string): Boolean;
-var
-  lDAOInstrutor: TInstrutorDAO;
-begin
-  if not DadosValidos(pUsuario, pSenha) then
-    raise EDadosInvalido.Create();
-
-  lDAOInstrutor := TInstrutorDAO.Create();
-  try
-    Result := lDAOInstrutor.Autenticar(pUsuario, pSenha);
-  finally
-    lDAOInstrutor.Free();
-  end;
-end;
-
 function TInstrutorService.DadosValidos(const pUsuario: string; const pSenha: string): Boolean;
 begin
   Result := (pUsuario <> '') and (pSenha <> '');
+end;
+
+function TInstrutorService.PesquisarPorFiltro(const pFiltro: string): TObjectList<TInstrutorModel>;
+var
+  lDAOInstrutor: IInstrutorDAO;
+begin
+  lDAOInstrutor := TInstrutorDAO.Create();
+  Result := lDAOInstrutor.PesquisarPorFiltro(pFiltro);
 end;
 
 { EDadosInvalido }
