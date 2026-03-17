@@ -67,11 +67,11 @@ end;
 
 procedure TfrmCadastroAluno.FormShow(Sender: TObject);
 begin
-  sgdAlunos.ColCount  := 4;
-  sgdAlunos.RowCount  := 2;
+  sgdAlunos.ColCount := 4;
+  sgdAlunos.RowCount := 2;
   sgdAlunos.FixedRows := 1;
   sgdAlunos.FixedCols := 0;
-  sgdAlunos.Options   := sgdAlunos.Options + [goRowSelect];
+  sgdAlunos.Options := sgdAlunos.Options + [goRowSelect];
 
   sgdAlunos.Cells[0, 0] := 'Nome';
   sgdAlunos.Cells[1, 0] := 'Faixa';

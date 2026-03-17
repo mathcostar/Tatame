@@ -46,9 +46,9 @@ type
     procedure btnCancelarClick(Sender: TObject);
     procedure edtCEPExit(Sender: TObject);
   private
-    FAlunoID     : Integer;
-    FInstrutores : TObjectList<TInstrutorModel>;
-    FCEPBuscando : Boolean;
+    FAlunoID: Integer;
+    FInstrutores: TObjectList<TInstrutorModel>;
+    FCEPBuscando: Boolean;
 
     procedure PreencherFaixas;
     procedure PreencherInstrutores;
@@ -89,15 +89,16 @@ end;
 
 procedure TfrmNovoAluno.PreencherFaixas;
 begin
-  cmbFaixa.Items.Clear;
-  cmbFaixa.Items.AddObject('Branca',  TObject(1));
+  cmbFaixa.Items.Clear();
+
+  cmbFaixa.Items.AddObject('Branca', TObject(1));
   cmbFaixa.Items.AddObject('Amarela', TObject(2));
   cmbFaixa.Items.AddObject('Laranja', TObject(3));
-  cmbFaixa.Items.AddObject('Verde',   TObject(4));
-  cmbFaixa.Items.AddObject('Azul',    TObject(5));
-  cmbFaixa.Items.AddObject('Roxa',    TObject(6));
-  cmbFaixa.Items.AddObject('Marrom',  TObject(7));
-  cmbFaixa.Items.AddObject('Preta',   TObject(8));
+  cmbFaixa.Items.AddObject('Verde', TObject(4));
+  cmbFaixa.Items.AddObject('Azul', TObject(5));
+  cmbFaixa.Items.AddObject('Roxa', TObject(6));
+  cmbFaixa.Items.AddObject('Marrom', TObject(7));
+  cmbFaixa.Items.AddObject('Preta', TObject(8));
 end;
 
 procedure TfrmNovoAluno.PreencherInstrutores;
@@ -120,13 +121,13 @@ end;
 
 function TfrmNovoAluno.Validar: Boolean;
 begin
-  Result := (edtNome.Text <> '')       and
-            (edtCEP.Text <> '')        and
+  Result := (edtNome.Text <> '') and
+            (edtCEP.Text <> '') and
             (edtLogradouro.Text <> '') and
-            (edtEstado.Text <> '')     and
-            (edtCidade.Text <> '')     and
-            (edtBairro.Text <> '')     and
-            (cmbFaixa.ItemIndex > -1)  and
+            (edtEstado.Text <> '') and
+            (edtCidade.Text <> '') and
+            (edtBairro.Text <> '') and
+            (cmbFaixa.ItemIndex > -1) and
             (cmbInstrutor.ItemIndex > -1);
 end;
 
@@ -136,12 +137,12 @@ var
 begin
   FAlunoID := pAluno.ID;
 
-  edtNome.Text       := pAluno.Nome;
-  edtCEP.Text        := pAluno.Endereco.CEP;
+  edtNome.Text := pAluno.Nome;
+  edtCEP.Text := pAluno.Endereco.CEP;
   edtLogradouro.Text := pAluno.Endereco.Logradouro;
-  edtEstado.Text     := pAluno.Endereco.Estado;
-  edtCidade.Text     := pAluno.Endereco.Cidade;
-  edtBairro.Text     := pAluno.Endereco.Bairro;
+  edtEstado.Text := pAluno.Endereco.Estado;
+  edtCidade.Text := pAluno.Endereco.Cidade;
+  edtBairro.Text := pAluno.Endereco.Bairro;
 
   for I := 0 to cmbFaixa.Items.Count - 1 do
     if Integer(cmbFaixa.Items.Objects[I]) = pAluno.FaixaID then
@@ -171,8 +172,8 @@ begin
   if FCEPBuscando then
     Exit();
 
-  FCEPBuscando              := True;
-  grpEndereco.Enabled       := False;
+  FCEPBuscando := True;
+  grpEndereco.Enabled := False;
   lblConsultandoCEP.Visible := True;
 
   TCEPBuscaThread.Create(edtCEP.Text, OnCEPEncontrado, OnCEPErro).Start;
@@ -181,20 +182,20 @@ end;
 procedure TfrmNovoAluno.OnCEPEncontrado(const pEndereco: TEnderecoModel);
 begin
   edtLogradouro.Text := pEndereco.Logradouro;
-  edtBairro.Text     := pEndereco.Bairro;
-  edtCidade.Text     := pEndereco.Cidade;
-  edtEstado.Text     := pEndereco.Estado;
+  edtBairro.Text := pEndereco.Bairro;
+  edtCidade.Text := pEndereco.Cidade;
+  edtEstado.Text := pEndereco.Estado;
 
   lblConsultandoCEP.Visible := False;
-  grpEndereco.Enabled       := True;
-  FCEPBuscando              := False;
+  grpEndereco.Enabled := True;
+  FCEPBuscando := False;
 end;
 
 procedure TfrmNovoAluno.OnCEPErro(const pMensagem: string);
 begin
   lblConsultandoCEP.Visible := False;
-  grpEndereco.Enabled       := True;
-  FCEPBuscando              := False;
+  grpEndereco.Enabled := True;
+  FCEPBuscando := False;
 
   ShowMessage(pMensagem);
 end;
@@ -214,7 +215,7 @@ var
   lAlunoService: TAlunoService;
   lAluno: TAlunoModel;
 begin
-  if not Validar then
+  if not Validar() then
     begin
       ShowMessage('Por favor, preencha todos os campos.');
       Exit();
@@ -222,15 +223,15 @@ begin
 
   lAluno := TAlunoModel.Create;
   try
-    lAluno.ID          := FAlunoID;
-    lAluno.Nome        := edtNome.Text;
-    lAluno.FaixaID     := SmallInt(Integer(cmbFaixa.Items.Objects[cmbFaixa.ItemIndex]));
+    lAluno.ID := FAlunoID;
+    lAluno.Nome := edtNome.Text;
+    lAluno.FaixaID := SmallInt(Integer(cmbFaixa.Items.Objects[cmbFaixa.ItemIndex]));
     lAluno.InstrutorID := TInstrutorModel(cmbInstrutor.Items.Objects[cmbInstrutor.ItemIndex]).ID;
-    lAluno.Endereco.CEP        := edtCEP.Text;
+    lAluno.Endereco.CEP := edtCEP.Text;
     lAluno.Endereco.Logradouro := edtLogradouro.Text;
-    lAluno.Endereco.Estado     := edtEstado.Text;
-    lAluno.Endereco.Cidade     := edtCidade.Text;
-    lAluno.Endereco.Bairro     := edtBairro.Text;
+    lAluno.Endereco.Estado := edtEstado.Text;
+    lAluno.Endereco.Cidade := edtCidade.Text;
+    lAluno.Endereco.Bairro := edtBairro.Text;
 
     lAlunoService := TAlunoService.Create;
     try

@@ -47,10 +47,10 @@ constructor TCEPBuscaThread.Create(const pCEP: string; pOnEncontrado: TOnCEPEnco
 begin
   inherited Create(True);
 
-  FCEP            := pCEP;
-  FOnEncontrado   := pOnEncontrado;
-  FOnErro         := pOnErro;
-  FEndereco       := nil;
+  FCEP := pCEP;
+  FOnEncontrado := pOnEncontrado;
+  FOnErro := pOnErro;
+  FEndereco := nil;
   FreeOnTerminate := True;
 end;
 
@@ -111,10 +111,10 @@ end;
 
 function TViaCEPService.BuscarEndereco(const pCEP: string): TEnderecoModel;
 var
-  lHTTP     : THTTPClient;
-  lResposta : IHTTPResponse;
-  lJSON     : TJSONObject;
-  lCEPLimpo : string;
+  lHTTP: THTTPClient;
+  lResposta: IHTTPResponse;
+  lJSON: TJSONObject;
+  lCEPLimpo: string;
 begin
   Result := TEnderecoModel.Create();
 
@@ -132,11 +132,11 @@ begin
       if lJSON.GetValue('erro') <> nil then
         Exit();
 
-      Result.CEP        := lJSON.GetValue<string>('cep');
+      Result.CEP := lJSON.GetValue<string>('cep');
       Result.Logradouro := lJSON.GetValue<string>('logradouro');
-      Result.Bairro     := lJSON.GetValue<string>('bairro');
-      Result.Cidade     := lJSON.GetValue<string>('localidade');
-      Result.Estado     := lJSON.GetValue<string>('uf');
+      Result.Bairro := lJSON.GetValue<string>('bairro');
+      Result.Cidade := lJSON.GetValue<string>('localidade');
+      Result.Estado := lJSON.GetValue<string>('uf');
     finally
       lJSON.Free();
     end;

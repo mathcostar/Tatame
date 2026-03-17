@@ -71,14 +71,14 @@ procedure TfrmNovoInstrutor.CarregarInstrutor(const pInstrutor: TInstrutorModel)
 begin
   FInstrutorID := pInstrutor.ID;
 
-  edtNome.Text       := pInstrutor.Nome;
-  edtUsuario.Text    := pInstrutor.Usuario;
-  edtSenha.Text      := pInstrutor.Senha;
-  edtCEP.Text        := pInstrutor.Endereco.CEP;
+  edtNome.Text := pInstrutor.Nome;
+  edtUsuario.Text := pInstrutor.Usuario;
+  edtSenha.Text := pInstrutor.Senha;
+  edtCEP.Text := pInstrutor.Endereco.CEP;
   edtLogradouro.Text := pInstrutor.Endereco.Logradouro;
-  edtEstado.Text     := pInstrutor.Endereco.Estado;
-  edtCidade.Text     := pInstrutor.Endereco.Cidade;
-  edtBairro.Text     := pInstrutor.Endereco.Bairro;
+  edtEstado.Text := pInstrutor.Endereco.Estado;
+  edtCidade.Text := pInstrutor.Endereco.Cidade;
+  edtBairro.Text := pInstrutor.Endereco.Bairro;
 end;
 
 procedure TfrmNovoInstrutor.edtCEPExit(Sender: TObject);
@@ -94,8 +94,8 @@ begin
   if FCEPBuscando then
     Exit;
 
-  FCEPBuscando              := True;
-  grpEndereco.Enabled       := False;
+  FCEPBuscando := True;
+  grpEndereco.Enabled := False;
   lblConsultandoCEP.Visible := True;
 
   TCEPBuscaThread.Create(edtCEP.Text, OnCEPEncontrado, OnCEPErro).Start;
@@ -104,20 +104,20 @@ end;
 procedure TfrmNovoInstrutor.OnCEPEncontrado(const pEndereco: TEnderecoModel);
 begin
   edtLogradouro.Text := pEndereco.Logradouro;
-  edtBairro.Text     := pEndereco.Bairro;
-  edtCidade.Text     := pEndereco.Cidade;
-  edtEstado.Text     := pEndereco.Estado;
+  edtBairro.Text := pEndereco.Bairro;
+  edtCidade.Text := pEndereco.Cidade;
+  edtEstado.Text := pEndereco.Estado;
 
   lblConsultandoCEP.Visible := False;
-  grpEndereco.Enabled       := True;
-  FCEPBuscando              := False;
+  grpEndereco.Enabled := True;
+  FCEPBuscando := False;
 end;
 
 procedure TfrmNovoInstrutor.OnCEPErro(const pMensagem: string);
 begin
   lblConsultandoCEP.Visible := False;
-  grpEndereco.Enabled       := True;
-  FCEPBuscando              := False;
+  grpEndereco.Enabled := True;
+  FCEPBuscando := False;
 
   ShowMessage(pMensagem);
 end;
@@ -153,15 +153,15 @@ begin
 
   lInstrutor := TInstrutorModel.Create();
   try
-    lInstrutor.ID                  := FInstrutorID;
-    lInstrutor.Nome                := edtNome.Text;
-    lInstrutor.Usuario             := edtUsuario.Text;
-    lInstrutor.Senha               := edtSenha.Text;
-    lInstrutor.Endereco.CEP        := edtCEP.Text;
+    lInstrutor.ID := FInstrutorID;
+    lInstrutor.Nome := edtNome.Text;
+    lInstrutor.Usuario := edtUsuario.Text;
+    lInstrutor.Senha := edtSenha.Text;
+    lInstrutor.Endereco.CEP := edtCEP.Text;
     lInstrutor.Endereco.Logradouro := edtLogradouro.Text;
-    lInstrutor.Endereco.Estado     := edtEstado.Text;
-    lInstrutor.Endereco.Cidade     := edtCidade.Text;
-    lInstrutor.Endereco.Bairro     := edtBairro.Text;
+    lInstrutor.Endereco.Estado := edtEstado.Text;
+    lInstrutor.Endereco.Cidade := edtCidade.Text;
+    lInstrutor.Endereco.Bairro := edtBairro.Text;
 
     lInstrutorService := TInstrutorService.Create;
     try
@@ -183,13 +183,13 @@ end;
 
 function TfrmNovoInstrutor.Validar: Boolean;
 begin
-  Result := (edtNome.Text <> '')       and
-            (edtCEP.Text <> '')        and
+  Result := (edtNome.Text <> '') and
+            (edtCEP.Text <> '') and
             (edtLogradouro.Text <> '') and
-            (edtEstado.Text <> '')     and
-            (edtCidade.Text <> '')     and
-            (edtBairro.Text <> '')     and
-            (edtUsuario.Text <> '')    and
+            (edtEstado.Text <> '') and
+            (edtCidade.Text <> '') and
+            (edtBairro.Text <> '') and
+            (edtUsuario.Text <> '') and
             (edtSenha.Text <> '');
 end;
 

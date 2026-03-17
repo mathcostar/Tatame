@@ -79,11 +79,11 @@ end;
 
 procedure TfrmCadastroInstrutor.FormShow(Sender: TObject);
 begin
-  sgdInstrutores.ColCount    := 4;
-  sgdInstrutores.RowCount    := 2;
-  sgdInstrutores.FixedRows   := 1;
-  sgdInstrutores.FixedCols   := 0;
-  sgdInstrutores.Options     := sgdInstrutores.Options + [goRowSelect];
+  sgdInstrutores.ColCount := 4;
+  sgdInstrutores.RowCount := 2;
+  sgdInstrutores.FixedRows := 1;
+  sgdInstrutores.FixedCols := 0;
+  sgdInstrutores.Options := sgdInstrutores.Options + [goRowSelect];
 
   sgdInstrutores.ColWidths[0] := 200;
   sgdInstrutores.ColWidths[1] := 120;
