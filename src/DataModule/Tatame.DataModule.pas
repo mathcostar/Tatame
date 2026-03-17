@@ -48,6 +48,7 @@ type
   private
     class var FInstancia: TdmPrincipal;
 
+    procedure Conectar;
     procedure CriarBanco;
     procedure ConectarBancoSistema;
     procedure CriarEstrutura;
@@ -83,18 +84,34 @@ begin
   FreeAndNil(FInstancia);
 end;
 
-procedure TdmPrincipal.DataModuleCreate(Sender: TObject);
+procedure TdmPrincipal.Conectar;
+var
+  lSenha: string;
 begin
+  lSenha := '123';
+
   fdConexao.Connected := False;
   fdConexao.Params.Clear;
   fdConexao.DriverName := 'PG';
   fdConexao.Params.Add('Server=localhost');
   fdConexao.Params.Add('Database=postgres');
   fdConexao.Params.Add('User_Name=postgres');
-  fdConexao.Params.Add('Password=123');
+  fdConexao.Params.Add('Password=' + lSenha);
   fdConexao.Params.Add('Port=5432');
   fdConexao.LoginPrompt := False;
-  fdConexao.Connected := True;
+
+  try
+    fdConexao.Connected := True;
+  except
+    lSenha := InputBox('Conexão com banco', 'Informe a senha do PostgreSQL:', '');
+    fdConexao.Params.Values['Password'] := lSenha;
+    fdConexao.Connected := True;
+  end;
+end;
+
+procedure TdmPrincipal.DataModuleCreate(Sender: TObject);
+begin
+  Conectar();
 
   if not BancoExiste() then
     begin
