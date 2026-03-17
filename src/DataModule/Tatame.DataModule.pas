@@ -59,9 +59,6 @@ type
     class procedure LiberarInstancia;
   end;
 
-var
-  dmPrincipal: TdmPrincipal;
-
 implementation
 
 uses
